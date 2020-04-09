@@ -1,0 +1,8 @@
+[package]
+name = "ambience"
+version = "0.1.0"
+authors = ["Valthor Halldorsson <vlthrh@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+thiserror = "*"
