@@ -3,6 +3,12 @@ name = "ambience"
 version = "0.1.0"
 authors = ["Valthor Halldorsson <vlthrh@gmail.com>"]
 edition = "2018"
+license = "MIT"
+description = "Lightweight library for passing ambient parameters"
+repository = "https://github.com/vlthr/ambience"
+# documentation = "https://docs.rs/ambience"
+categories = ["rust-patterns"]
+readme = "README.md"
 
 [dependencies]
-thiserror = "*"
+thiserror = "1"
