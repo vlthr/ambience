@@ -112,6 +112,7 @@ fn unset(type_id: &TypeId, id: &usize) {
 /// `set` can be called multiple times. The values of type `T` are treated as a stack, where
 /// a call to `get::<T>()` will always yield the most recently added `T`. When the `AmbientGuard`
 /// for a value on the stack is dropped, it is removed from the stack.
+#[must_use]
 pub fn set<T: 'static>(new_val: T) -> AmbientGuard<T> {
     THREAD_LOCALS.with(|frame_opt| {
         let mut storage = frame_opt.borrow_mut();
