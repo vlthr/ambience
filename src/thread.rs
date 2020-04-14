@@ -41,6 +41,14 @@ impl AmbientMap {
         })
     }
 
+    /// Returns `true` if there is one or more `T` values on the ambient stack.
+    pub fn has<T: 'static>(&self) -> bool {
+        self.data
+            .get(&TypeId::of::<T>())
+            .map(|stack| !stack.is_empty())
+            .unwrap_or(false)
+    }
+
     /// Pops the topmost (most recent still-active) value of type `T`.
     pub fn remove(&mut self, type_id: &TypeId, id: &usize) {
         self.data
@@ -97,6 +105,11 @@ pub fn get<T: 'static>() -> Result<Rc<T>> {
             .peek::<T>()
             .ok_or_else(|| Error::ThreadAmbientUndefined(std::any::type_name::<T>()))
     })
+}
+
+/// Returns `true` if ambient data of type `T` is set on the current thread.
+pub fn has<T: 'static>() -> bool {
+    THREAD_LOCALS.with(|frame_opt| frame_opt.borrow().has::<T>())
 }
 
 fn unset(type_id: &TypeId, id: &usize) {
@@ -166,9 +179,11 @@ mod tests {
             // set `one` as ambient data
             let _frame_guard = ambience::set(one);
             assert_eq!(*ambience::get::<u64>().unwrap(), one);
+            assert!(ambience::has::<u64>());
         }
         // no ambient frame in scope
         assert!(ambience::get::<u64>().is_err());
+        assert!(!ambience::has::<u64>());
         Ok(())
     }
 
